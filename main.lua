@@ -13,6 +13,8 @@ function love.load()
 		end
 	end
 	game.font:render(str, 10, 10)
+	game.font:render(("-"):rep(80), 0, 0)
+	game.font:render(("-"):rep(80), 0, 44)
 end
 
 function love.update(delta)

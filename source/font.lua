@@ -9,10 +9,12 @@ function font.new(file, width, height)
 		local x, y = i%16, math.floor(i/16)
 		quads[i] = love.graphics.newQuad(x*fontWidth, y*fontHeight, fontWidth, fontHeight, image:getWidth(), image:getHeight())
 	end
+	local canvas = love.graphics.newCanvas(width*(fontWidth+1), height*(fontHeight+1))
+	canvas:setFilter("nearest", "nearest")
 	return setmetatable({
 		image = image,
 		quads = quads,
-		canvas = love.graphics.newCanvas(width*(fontWidth+1), height*(fontHeight+1)),
+		canvas = canvas,
 		fontWidth = fontWidth,
 		fontHeight = fontHeight,
 	}, {__index=font})
@@ -35,6 +37,22 @@ function font:render(text, ox, oy)
 		end
 	end
 	love.graphics.setCanvas()
+end
+
+function font:draw(targetWidth, targetHeight)
+	local canvasWidth, canvasHeight = self.canvas:getWidth(), self.canvas:getHeight()
+	local scaleX, scaleY = targetWidth/canvasWidth, targetHeight/canvasHeight
+	local scale = math.min(scaleX, scaleY)
+	local iScale = math.max(math.floor(scale), 1)
+	local iCanvas = love.graphics.newCanvas(canvasWidth*iScale, canvasHeight*iScale)
+	iCanvas:setFilter("linear", "linear")
+	love.graphics.setCanvas(iCanvas)
+	love.graphics.rectangle("fill", 0, 0, canvasWidth*iScale, canvasHeight*iScale)
+	love.graphics.draw(self.canvas, 0, 0, 0, iScale, iScale)
+	love.graphics.setCanvas()
+	local offsetX, offsetY = (scaleX-scale)*canvasWidth/2, (scaleY-scale)*canvasHeight/2
+	love.graphics.draw(iCanvas, offsetX, offsetY, 0, scale/iScale, scale/iScale)
+	iCanvas:release()
 end
 
 return font
