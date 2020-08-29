@@ -23,7 +23,7 @@ function font.new(file, width, height)
 end
 
 function font:render(text, ox, oy)
-	local x, y = ox, oy
+	local x, y = math.floor(ox), math.floor(oy)
 	love.graphics.setCanvas(self.canvas)
 	for i = 1, #text do
 		if text:sub(i, i) == "\n" then

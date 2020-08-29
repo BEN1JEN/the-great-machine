@@ -4,7 +4,7 @@ local factory = {}
 function factory.new(host)
 	return setmetatable({
 		host = host,
-		grid = {tiles={}, width=20, height=10},
+		grid = {tiles={}, width=20, height=20},
 	}, {__index=factory})
 end
 
