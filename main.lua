@@ -1,19 +1,24 @@
 local game, input, globalUpdater
-function love.load()
-	love.filesystem.setRequirePath("?.lua;?/main.lua;source/?.lua")
+function love.load(args)
+	local server = true
+	local address = "127.0.0.1:3003"
+	if args[1] then
+		server = false
+		address = args[1] .. ":3003"
+	end
+	local path = "?.lua;?/main.lua;source/?.lua"
+	if server then
+		path = path .. ";source/server/?.lua"
+	end
+	love.filesystem.setRequirePath(path)
+
+	love.thread.newThread("source/server/main.lua"):start()
+	love.timer.sleep(0.1)
+
 	require "lib"
-	game = require("game").new()
+	game = require("game").new(address)
 	input = require "input"
 	globalUpdater = require "globalUpdater"
-	local str = ""
-	for i = 0, 255 do
-		str = str .. string.char(i)
-		if i % 16 == 15 then
-			str = str .. "\n"
-		end
-	end
-	game.font:render(str, 10, 10)
-	game.font:box(10, 10, 16, 16, "Charecters")
 end
 
 function love.update(delta)
