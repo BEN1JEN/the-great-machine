@@ -17,6 +17,7 @@ function game:update(delta, input)
 	while event do
 		if event.type == "receive" then
 			local data = serialize.deserialize(event.data)
+			print("receive packet", data)
 			if data.type == "factoryGrid" then
 				self.factory.grid = data.grid
 				self.factory.redrawAll = true
