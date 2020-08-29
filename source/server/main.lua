@@ -1,7 +1,9 @@
 local enet = require "enet"
 local host = enet.host_create("0.0.0.0:3003")
 
-local factory = require("factory").new()
+local factory = require("factory").new(host)
+
+factory:setTile(2, 2, {type="chest"})
 
 while true do
   local event = host:service(100)

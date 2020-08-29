@@ -4,20 +4,20 @@ local factory = {}
 function factory.new(host)
 	return setmetatable({
 		host = host,
-		grid = {},
+		grid = {tiles={}, width=20, height=10},
 	}, {__index=factory})
 end
 
 function factory:setTile(x, y, tile)
-	if grid[x] then
-		grid[x] = {}
+	if not self.grid.tiles[x] then
+		self.grid.tiles[x] = {}
 	end
-	grid[x][y] = tile
-	host:broadcast(serialize.deserialize{type="setTile", x=x, y=y, tile=tile})
+	self.grid.tiles[x][y] = tile
+	self.host:broadcast(serialize.serialize{type="setTile", x=x, y=y, tile=tile})
 end
 
 function factory:send(peer)
-	peer:send(serialize.serialize{type="sendFactory", grid=self.grid})
+	peer:send(serialize.serialize{type="factoryGrid", grid=self.grid})
 end
 
 return factory

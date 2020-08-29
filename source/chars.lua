@@ -1,35 +1,62 @@
 local chars = {
-	beamUpDown = 0x80,
-	beamLeftRight = 0x81,
-	beamDownRight = 0x82,
-	beamDownLeft = 0x83,
-	beamUpRight = 0x84,
-	beamUpLeft = 0x85,
-	beamDownLeftRight = 0x86,
-	beamUpDownLeft = 0x87,
-	beamUpLeftRight = 0x88,
-	beamUpDownRight = 0x89,
-	beamAll = 0x8A,
-	beamStartLabel = 0x8B,
-	beamEndLabel = 0x8C,
+	beam = {
+		upDown = 0x80,
+		leftRight = 0x81,
+		downRight = 0x82,
+		downLeft = 0x83,
+		upRight = 0x84,
+		upLeft = 0x85,
+		downLeftRight = 0x86,
+		upDownLeft = 0x87,
+		upLeftRight = 0x88,
+		upDownRight = 0x89,
+		all = 0x8A,
+		startLabel = 0x8B,
+		endLabel = 0x8C,
+	},
 
-	duelUpDown = 0x90,
-	duelLeftRight = 0x91,
-	duelDownRight = 0x92,
-	duelDownLeft = 0x93,
-	duelUpRight = 0x94,
-	duelUpLeft = 0x95,
-	duelDownLeftRight = 0x96,
-	duelUpDownLeft = 0x97,
-	duelUpLeftRight = 0x9,
-	duelUpDownRight = 0x99,
-	duelAll = 0x9A,
-	duelStartLabel = 0x9B,
-	duelEndLabel = 0x9C,
+	duel = {
+		upDown = 0x90,
+		leftRight = 0x91,
+		downRight = 0x92,
+		downLeft = 0x93,
+		upRight = 0x94,
+		upLeft = 0x95,
+		downLeftRight = 0x96,
+		upDownLeft = 0x97,
+		upLeftRight = 0x9,
+		upDownRight = 0x99,
+		all = 0x9A,
+		startLabel = 0x9B,
+		endLabel = 0x9C,
+	},
+
+	factory = {
+		floor = 0x9D,
+		wall = 0x8D,
+	},
+
+	walls = {
+		all = 0x8D,
+		left = 0x8E,
+		up = 0x8F,
+		right = 0x9E,
+		down = 0x9F,
+		upLeft = 0xB1,
+		upRight = 0xB0,
+		downLeft = 0xA1,
+		downRight = 0xA0,
+	},
+
+	machines = {
+		chest = 0xA2,
+	},
 }
 
-for name, char in pairs(chars) do
-	chars[name] = string.char(char)
+for catname, cat in pairs(chars) do
+	for name, char in pairs(cat) do
+		chars[catname][name] = string.char(char)
+	end
 end
 
 return chars

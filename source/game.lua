@@ -7,6 +7,7 @@ function game.new(address)
 	return setmetatable({
 		font = require("font").new("assets/font.png", 80, 45),
 		host = host,
+		factory = require("client.factory").new()
 	}, {__index=game})
 end
 
@@ -14,7 +15,11 @@ function game:update(delta, input)
 	local event = self.host:service()
 	while event do
 		if event.type == "receive" then
-			print("recieve", serialize.deserialize(event.data))
+			local data = serialize.deserialize(event.data)
+			if data.type == "factoryGrid" then
+				self.factory.grid = data.grid
+				self.factory:draw(self.font, 1, 1, 78, 43)
+			end
 		elseif event.type == "connect" then
 		elseif event.type == "disconnect" then
 		end

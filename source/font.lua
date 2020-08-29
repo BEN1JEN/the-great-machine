@@ -1,4 +1,3 @@
-local chars = require "chars"
 local font = {}
 font.cursor = love.graphics.newImage("assets/cursor.png")
 font.cursor:setFilter("nearest", "nearest")
@@ -42,18 +41,18 @@ function font:render(text, ox, oy)
 	love.graphics.setCanvas()
 end
 
-function font:box(x, y, width, height, label)
+function font:box(boxType, x, y, width, height, label)
 	x, y = x-1, y-1
 	width, height = width+2, height+2
 
-	self:render(chars.duelDownRight .. chars.duelLeftRight:rep(width-2) .. chars.duelDownLeft, x, y)
-	self:render(chars.duelUpRight .. chars.duelLeftRight:rep(width-2) .. chars.duelUpLeft, x, y+height-1)
+	self:render(boxType.downRight .. (boxType.leftRight or boxType.up):rep(width-2) .. boxType.downLeft, x, y)
+	self:render(boxType.upRight .. (boxType.leftRight or boxType.down):rep(width-2) .. boxType.upLeft, x, y+height-1)
 	for i = y+1, y+height-2 do
-		self:render(chars.duelUpDown, x, i)
-		self:render(chars.duelUpDown, x+width-1, i)
+		self:render(boxType.upDown or boxType.left, x, i)
+		self:render(boxType.upDown or boxType.right, x+width-1, i)
 	end
 	if label then
-		self:render(chars.duelStartLabel .. tostring(label) .. chars.duelEndLabel, x+1, y)
+		self:render(boxType.startLabel .. tostring(label) .. boxType.endLabel, x+1, y)
 	end
 end
 
