@@ -48,9 +48,13 @@ function factory:update(delta, input, game)
 	if input.interact.down then
 		local mouseX, mouseY = math.floor((input.mouse.x + 1)/2 + self.camera.x), math.floor((input.mouse.y + 1)/2 + self.camera.y)
 		if self.grid.tiles[mouseX] and self.grid.tiles[mouseX][mouseY] then
-			local window = gui.tile(self.grid.tiles[mouseX][mouseY])
-			if window then
-				game:open(window)
+			local tile = self.grid.tiles[mouseX][mouseY]
+			if not tile.open then
+				tile.open = true
+				local window = gui.tile(tile)
+				if window then
+					game:openWindow(window)
+				end
 			end
 		end
 	end

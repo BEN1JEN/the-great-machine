@@ -17,7 +17,11 @@ function gui.tile(tile)
 end
 
 function gui:update(delta, input, game)
-
+	if input.interact.down and
+		math.floor(input.mouse.x) == self.layout.gui.x+self.layout.gui.width-1 and
+		math.floor(input.mouse.y) == self.layout.gui.y-1 then
+		game:closeWindow(self)
+	end
 end
 
 function gui:draw(font)
@@ -27,9 +31,13 @@ function gui:draw(font)
 	end
 end
 
+function gui:close()
+end
+
 function gui:drawAll(font)
 	font:box(chars.duel, self.layout.gui.x, self.layout.gui.y, self.layout.gui.width, self.layout.gui.height, i18n(self.title))
 	font:fill(" ", self.layout.gui.x, self.layout.gui.y, self.layout.gui.width, self.layout.gui.height)
+	font:render("X", self.layout.gui.x+self.layout.gui.width-1, self.layout.gui.y-1)
 end
 
 return gui

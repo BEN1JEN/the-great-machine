@@ -35,8 +35,20 @@ function game:update(delta, input)
 	end
 end
 
-function game:open(window)
+function game:openWindow(window)
 	table.insert(self.openWindows, window)
+end
+
+function game:closeWindow(closingWindow)
+	closingWindow:close()
+	for id, window in pairs(self.openWindows) do
+		if window == closingWindow then
+			self.openWindows[id] = nil
+		else
+			window.redrawAll = true
+		end
+	end
+	self.factory.redrawAll = true
 end
 
 function game:draw()
