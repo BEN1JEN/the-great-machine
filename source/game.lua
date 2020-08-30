@@ -17,6 +17,9 @@ function game:update(delta, input)
 	local mouseX, mouseY = self.font:getMouse(width, height)
 	input.mouse = {x=mouseX, y=mouseY}
 	self.factory:update(delta, input, self)
+	for _, window in pairs(self.openWindows) do
+		window:update(delta, input, self)
+	end
 	local event = self.host:service()
 	while event do
 		if event.type == "receive" then
@@ -39,6 +42,9 @@ end
 function game:draw()
 	local width, height = love.window.getMode()
 	self.factory:draw(self.font, 1, 1, 78, 43)
+	for _, window in pairs(self.openWindows) do
+		window:draw(self.font)
+	end
 	self.font:draw(width, height)
 end
 

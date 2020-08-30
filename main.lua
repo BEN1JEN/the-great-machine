@@ -12,6 +12,8 @@ function love.load(args)
 	end
 	love.filesystem.setRequirePath(path)
 
+	require("i18n").init("en_ca")
+
 	love.thread.newThread("source/server/main.lua"):start()
 	love.timer.sleep(0.1)
 

@@ -18,4 +18,6 @@ return {
 	["items.titanium_ore"] = "Titanium Ore",
 	["items.platinum_ore"] = "Platinum Ore",
 	["items.cobalt_ore"] = "Cobalt Ore",
+
+	["gui.chest"] = "Chest",
 }

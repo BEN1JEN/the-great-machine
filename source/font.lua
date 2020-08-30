@@ -56,6 +56,10 @@ function font:box(boxType, x, y, width, height, label)
 	end
 end
 
+function font:fill(char, x, y, width, height)
+	self:render((char:rep(width) .. "\n"):rep(height), x, y)
+end
+
 function font:getScaleOffset(targetWidth, targetHeight)
 	local scaleX, scaleY = targetWidth/self.canvas:getWidth(), targetHeight/self.canvas:getHeight()
 	local scale = math.min(scaleX, scaleY)
