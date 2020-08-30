@@ -29,5 +29,8 @@ return {
       {type="hat", hat=1, direction="d"},
       {type="touch", shape="circle", x = 100, y = 50, size = 25, symbol = "v", align = "bl"},
     },
+    interact = {
+      {type="mouse", side=1},
+    }
   },
 }

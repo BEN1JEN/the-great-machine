@@ -7,26 +7,33 @@ function game.new(address)
 	return setmetatable({
 		font = require("font").new("assets/font.png", 80, 45),
 		host = host,
-		factory = require("client.factory").new()
+		factory = require("client.factory").new(),
+		openWindows = {},
 	}, {__index=game})
 end
 
 function game:update(delta, input)
-	self.factory:update(delta, input)
+	local width, height = love.window.getMode()
+	local mouseX, mouseY = self.font:getMouse(width, height)
+	input.mouse = {x=mouseX, y=mouseY}
+	self.factory:update(delta, input, self)
 	local event = self.host:service()
 	while event do
 		if event.type == "receive" then
 			local data = serialize.deserialize(event.data)
 			print("receive packet", data)
 			if data.type == "factoryGrid" then
-				self.factory.grid = data.grid
-				self.factory.redrawAll = true
+				self.factory:load(data.grid)
 			end
 		elseif event.type == "connect" then
 		elseif event.type == "disconnect" then
 		end
 		event = self.host:service()
 	end
+end
+
+function game:open(window)
+	table.insert(self.openWindows, window)
 end
 
 function game:draw()

@@ -56,15 +56,24 @@ function font:box(boxType, x, y, width, height, label)
 	end
 end
 
-function font:draw(targetWidth, targetHeight)
-	local canvasWidth, canvasHeight = self.canvas:getWidth(), self.canvas:getHeight()
-	local scaleX, scaleY = targetWidth/canvasWidth, targetHeight/canvasHeight
+function font:getScaleOffset(targetWidth, targetHeight)
+	local scaleX, scaleY = targetWidth/self.canvas:getWidth(), targetHeight/self.canvas:getHeight()
 	local scale = math.min(scaleX, scaleY)
-	local offsetX, offsetY = (scaleX-scale)*canvasWidth/2, (scaleY-scale)*canvasHeight/2
+	local offsetX, offsetY = (scaleX-scale)*self.canvas:getWidth()/2, (scaleY-scale)*self.canvas:getHeight()/2
+	return scale, offsetX, offsetY
+end
+
+function font:getMouse(targetWidth, targetHeight)
+	local scale, offsetX, offsetY = self:getScaleOffset(targetWidth, targetHeight)
 	local mouseX, mouseY = love.mouse.getPosition()
-	mouseX, mouseY = (mouseX-offsetX)/scale/self.fontWidth, (mouseY-offsetY)/scale/self.fontHeight
+	return (mouseX-offsetX)/scale/self.fontWidth, (mouseY-offsetY)/scale/self.fontHeight
+end
+
+function font:draw(targetWidth, targetHeight)
+	local scale, offsetX, offsetY = self:getScaleOffset(targetWidth, targetHeight)
+	local mouseX, mouseY = self:getMouse(targetWidth, targetHeight)
 	local iScale = math.max(math.floor(scale), 1)
-	local iCanvas = love.graphics.newCanvas(canvasWidth*iScale, canvasHeight*iScale)
+	local iCanvas = love.graphics.newCanvas(self.canvas:getWidth()*iScale, self.canvas:getHeight()*iScale)
 	iCanvas:setFilter("linear", "linear")
 	love.graphics.setCanvas(iCanvas)
 	love.graphics.draw(self.canvas, 0, 0, 0, iScale, iScale)
