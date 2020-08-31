@@ -14,8 +14,10 @@ function love.load(args)
 
 	require("i18n").init("en_ca")
 
-	love.thread.newThread("source/server/main.lua"):start()
-	love.timer.sleep(0.1)
+	if server then
+		love.thread.newThread("source/server/main.lua"):start()
+		love.timer.sleep(0.1)
+	end
 
 	require "lib"
 	game = require("game").new(address)

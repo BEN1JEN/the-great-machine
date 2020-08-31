@@ -4,14 +4,16 @@ local game = {}
 
 function game.new(address)
 	local host = require("enet").host_create()
-	host:connect(address)
+	local server = host:connect(address)
 	return setmetatable({
 		font = require("font").new("assets/font.png", 80, 45),
 		host = host,
+		server = server,
 		factory = require("client.factory").new(),
 		playerInventory = require("server.inventory").new(12, 6),
 		playerGui = nil,
 		openWindows = {},
+		heldSlot = {amount=0},
 	}, {__index=game})
 end
 
@@ -37,6 +39,16 @@ function game:update(delta, input)
 			local data = serialize.deserialize(event.data)
 			if data.type == "factoryGrid" then
 				self.factory:load(data.grid)
+			elseif data.type == "setHeldSlot" then
+				self.heldSlot = data.slot
+			elseif data.type == "setMachineSlot" then
+				self.factory.grid.tiles[data.machinePos.x][data.machinePos.y].inventory[data.machineInventoryId].slots[data.machineSlot.x][data.machineSlot.y] = data.slot
+			elseif data.type == "setPlayerSlot" then
+				self.playerInventory.slots[data.playerSlot.x][data.playerSlot.y] = data.slot
+			elseif data.type == "error" then
+				print("Server error: " .. tostring(data.error))
+			else
+				print("Unknown packet:", data)
 			end
 		elseif event.type == "connect" then
 		elseif event.type == "disconnect" then

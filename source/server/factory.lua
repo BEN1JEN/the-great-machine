@@ -15,6 +15,12 @@ function factory:setTile(x, y, tile)
 	self.grid.tiles[x][y] = tile
 	self.host:broadcast(serialize.serialize{type="setTile", x=x, y=y, tile=tile})
 end
+function factory:getTile(x, y)
+	if not self.grid.tiles[x] then
+		return nil
+	end
+	return self.grid.tiles[x][y]
+end
 
 function factory:send(peer)
 	peer:send(serialize.serialize{type="factoryGrid", grid=self.grid})

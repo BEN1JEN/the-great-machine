@@ -5,7 +5,7 @@ local serialize = require "serialize"
 local gui = {}
 local opened = {}
 
-function gui.tile(tile)
+function gui.tile(tile, machineX, machineY)
 	if opened[tile.type] then
 		return false
 	end
@@ -20,7 +20,8 @@ function gui.tile(tile)
 		data = tile,
 		title = "gui." .. tile.type,
 		redrawAll = true,
-		mouseX = 0, mouseY = 0, 
+		mouseX = 0, mouseY = 0,
+		machineX = machineX, machineY = machineY,
 	}, {__index=gui})
 end
 
@@ -42,8 +43,16 @@ function gui:update(delta, input, game)
 		game:closeWindow(self)
 	end
 	self.mouseX, self.mouseY = input.mouse.x, input.mouse.y
-	if self.layout.inventory then
+	if self.layout.inventory and input.interact.down then
 		for id, inv in ipairs(self.layout.inventory) do
+			local invMouseX, invMouseY = math.floor(input.mouse.x-self.layout.gui.x+inv.x)/2+1, math.floor(input.mouse.y-self.layout.gui.y+inv.y)/2+1
+			if invMouseX > 0 and invMouseX <= inv.width and invMouseY > 0 and invMouseY <= inv.height and math.isInteger(invMouseX) and math.isInteger(invMouseY) then
+				if self.type == "player" then
+					inventory.swapPlayerItem(invMouseX, invMouseY, game)
+				else
+					inventory.swapMachineItem(self.machineX, self.machineY, id, invMouseX, invMouseY, game)
+				end
+			end
 		end
 	end
 end

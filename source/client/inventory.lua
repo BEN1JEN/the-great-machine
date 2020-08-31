@@ -1,5 +1,6 @@
 local items = require "client.items"
 local chars = require "chars"
+local serialize = require "serialize"
 local inventory = {}
 
 function inventory.draw(font, data, x, y, width, height, mouseX, mouseY)
@@ -40,12 +41,25 @@ function inventory.draw(font, data, x, y, width, height, mouseX, mouseY)
 	end
 end
 
-function inventory.moveItem(machineX, machineY, machineInv, machineSlotX, machineSlotY, playerSlotX, playerSlotY, game)
-	game.host:send(serialize.serialize{
-		type="moveItem",
+function inventory.swapMachineItem(machineX, machineY, machineInv, machineSlotX, machineSlotY, game)
+	local tmp = game.heldSlot
+	local inv = game.factory.grid.tiles[machineX][machineY].inventory[machineInv]
+	game.heldSlot = inv.slots[machineSlotX][machineSlotY]
+	inv.slots[machineSlotX][machineSlotY] = tmp
+	game.server:send(serialize.serialize{
+		type="swapMachineItem",
 		machinePos={x=machineX, y=machineY},
 		machineInventoryId=machineInv,
 		machineSlot={x=machineSlotX, y=machineSlotY},
+	})
+end
+
+function inventory.swapPlayerItem(playerSlotX, playerSlotY, game)
+	local tmp = game.heldSlot
+	game.heldSlot = game.playerInventory.slots[playerSlotX][playerSlotY]
+	game.playerInventory.slots[playerSlotX][playerSlotY] = tmp
+	game.server:send(serialize.serialize{
+		type="swapPlayerItem",
 		playerSlot={x=playerSlotX, y=playerSlotY},
 	})
 end

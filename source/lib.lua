@@ -114,7 +114,7 @@ end
 
 bit, bit32 = bit or bit32, bit32 or bit
 
-if love then
+if love and love.system then
   compat = {}
   local major, minor, revision, version = love.getVersion()
   local os = love.system.getOS()
