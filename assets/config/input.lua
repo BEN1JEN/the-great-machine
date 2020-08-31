@@ -31,6 +31,10 @@ return {
     },
     interact = {
       {type="mouse", side=1},
-    }
+    },
+    inventory = {
+      {type="kb", key="b"},
+      {type="kb", key="i"},
+    },
   },
 }

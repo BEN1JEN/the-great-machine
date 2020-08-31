@@ -19,5 +19,6 @@ return {
 	["items.platinum_ore"] = "Platinum Ore",
 	["items.cobalt_ore"] = "Cobalt Ore",
 
+	["gui.playerInventory"] = "Inventory",
 	["gui.chest"] = "Chest",
 }

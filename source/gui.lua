@@ -1,6 +1,7 @@
 local chars = require "chars"
 local i18n = require "i18n"
 local inventory = require "client.inventory"
+local serialize = require "serialize"
 local gui = {}
 local opened = {}
 
@@ -19,7 +20,18 @@ function gui.tile(tile)
 		data = tile,
 		title = "gui." .. tile.type,
 		redrawAll = true,
-		mouseX, mouseY = 0, 0,
+		mouseX = 0, mouseY = 0, 
+	}, {__index=gui})
+end
+
+function gui.inventory(inventory, x, y, width, height)
+	return setmetatable({
+		type = "player",
+		layout = {gui={x=x, y=y, width=width*2, height=height*2}, inventory={{x=0, y=0, width=width, height=height}}},
+		data = {inventory={inventory}},
+		title = "gui.playerInventory",
+		redrawAll = true,
+		mouseX = 0, mouseY = 0,
 	}, {__index=gui})
 end
 
@@ -30,6 +42,10 @@ function gui:update(delta, input, game)
 		game:closeWindow(self)
 	end
 	self.mouseX, self.mouseY = input.mouse.x, input.mouse.y
+	if self.layout.inventory then
+		for id, inv in ipairs(self.layout.inventory) do
+		end
+	end
 end
 
 function gui:draw(font)

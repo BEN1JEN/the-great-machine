@@ -1,4 +1,5 @@
 local serialize = require "serialize"
+local gui = require "gui"
 local game = {}
 
 function game.new(address)
@@ -8,6 +9,8 @@ function game.new(address)
 		font = require("font").new("assets/font.png", 80, 45),
 		host = host,
 		factory = require("client.factory").new(),
+		playerInventory = require("server.inventory").new(12, 6),
+		playerGui = nil,
 		openWindows = {},
 	}, {__index=game})
 end
@@ -19,6 +22,14 @@ function game:update(delta, input)
 	self.factory:update(delta, input, self)
 	for _, window in pairs(self.openWindows) do
 		window:update(delta, input, self)
+	end
+	if input.inventory.down then
+		if self.playerGui then
+			self:closeWindow(self.playerGui)
+		else
+			self.playerGui = gui.inventory(self.playerInventory, 80/2-12*2/2, 44-6*4-4, 12, 6)
+			self:openWindow(self.playerGui)
+		end
 	end
 	local event = self.host:service()
 	while event do
@@ -48,6 +59,9 @@ function game:closeWindow(closingWindow)
 		end
 	end
 	self.factory.redrawAll = true
+	if closingWindow == self.playerGui then
+		self.playerGui = nil
+	end
 end
 
 function game:draw()

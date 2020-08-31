@@ -40,4 +40,14 @@ function inventory.draw(font, data, x, y, width, height, mouseX, mouseY)
 	end
 end
 
+function inventory.moveItem(machineX, machineY, machineInv, machineSlotX, machineSlotY, playerSlotX, playerSlotY, game)
+	game.host:send(serialize.serialize{
+		type="moveItem",
+		machinePos={x=machineX, y=machineY},
+		machineInventoryId=machineInv,
+		machineSlot={x=machineSlotX, y=machineSlotY},
+		playerSlot={x=playerSlotX, y=playerSlotY},
+	})
+end
+
 return inventory
