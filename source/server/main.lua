@@ -5,7 +5,9 @@ local factory = require("factory").new(host)
 local tile = require "tile"
 local item = require "item"
 
-factory:setTile(2, 2, tile.new("chest"))
+local chest = tile.new("chest")
+chest.inventory[1].slots[3][2] = {type="wood", amount=5}
+factory:setTile(2, 2, chest)
 
 while true do
   local event = host:service(100)

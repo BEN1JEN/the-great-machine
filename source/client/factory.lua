@@ -58,6 +58,7 @@ function factory:update(delta, input, game)
 end
 
 function factory:draw(font, ox, oy, width, height)
+	self.redrawAll = true -- TODO: Don't be lazy
 	if self.redrawAll then
 		self:drawAll(font, ox, oy, width, height)
 	end

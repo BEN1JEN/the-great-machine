@@ -48,6 +48,13 @@ local chars = {
 		downRight = 0xA0,
 	},
 
+	items = {
+		ore = 0xA4,
+		ingot = 0xB4,
+		plant = 0xA5,
+		block = 0xB5,
+	},
+
 	machines = {
 		chest = 0xA2,
 	},

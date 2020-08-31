@@ -24,7 +24,6 @@ function game:update(delta, input)
 	while event do
 		if event.type == "receive" then
 			local data = serialize.deserialize(event.data)
-			print("receive packet", data)
 			if data.type == "factoryGrid" then
 				self.factory:load(data.grid)
 			end

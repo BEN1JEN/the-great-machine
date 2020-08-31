@@ -1,5 +1,6 @@
 local chars = require "chars"
 local i18n = require "i18n"
+local inventory = require "client.inventory"
 local gui = {}
 local opened = {}
 
@@ -18,6 +19,7 @@ function gui.tile(tile)
 		data = tile,
 		title = "gui." .. tile.type,
 		redrawAll = true,
+		mouseX, mouseY = 0, 0,
 	}, {__index=gui})
 end
 
@@ -27,9 +29,11 @@ function gui:update(delta, input, game)
 		math.floor(input.mouse.y) == self.layout.gui.y-1 then
 		game:closeWindow(self)
 	end
+	self.mouseX, self.mouseY = input.mouse.x, input.mouse.y
 end
 
 function gui:draw(font)
+	self.redrawAll = true -- TODO: Don't be lazy
 	if self.redrawAll then
 		self:drawAll(font)
 		self.redrawAll = false
@@ -45,7 +49,8 @@ function gui:drawAll(font)
 	font:fill(" ", self.layout.gui.x, self.layout.gui.y, self.layout.gui.width, self.layout.gui.height)
 	font:render("X", self.layout.gui.x+self.layout.gui.width-1, self.layout.gui.y-1)
 	if self.layout.inventory then
-		for _, inv in ipairs(self.layout.inventory) do
+		for id, inv in ipairs(self.layout.inventory) do
+			inventory.draw(font, self.data.inventory[id], self.layout.gui.x+inv.x, self.layout.gui.y+inv.y, inv.width, inv.height, self.mouseX, self.mouseY)
 		end
 	end
 end
