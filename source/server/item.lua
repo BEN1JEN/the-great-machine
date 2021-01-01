@@ -7,13 +7,10 @@ function item.init()
 			item.items[name] = i
 		end
 	end
-end
-
-function item.new(type)
-	if not item.items[type] then
-		error("No item found: " .. tostring(type))
+	for _, file in ipairs(love.filesystem.getDirectoryItems("assets/tiles")) do
+		local name = file:gsub("%.lua$", "")
+		item.items["tile_" .. name] = {char="machine", place=name}
 	end
-
 end
 
 function item.mine()

@@ -36,7 +36,7 @@ while true do
             event.peer:send(serialize.serialize{type="error", error="Invalid machine."})
           end
         elseif data.type == "swapPlayerItem" then
-          local inv = player.inventory
+          local inv = player.inventory.slots
           if inv and inv[data.playerSlot.x] and inv[data.playerSlot.x][data.playerSlot.y] then
             local tmp = player.handSlot
             player.handSlot = inv[data.playerSlot.x][data.playerSlot.y]
@@ -46,6 +46,14 @@ while true do
           else
             event.peer:send(serialize.serialize{type="error", error="Invalid slot."})
           end
+        elseif data.type == "placeItem" then
+          if player.handSlot.amount > 0 then
+            local tile = item.items[player.handSlot.type].place
+            if tile then
+              
+            end
+          end
+        end
         else
           event.peer:send(serialize.serialize{type="error", error="Unknown message type."})
         end
